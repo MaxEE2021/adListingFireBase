@@ -2,6 +2,7 @@
 import 'package:classified_app/screens/create_add_screen.dart';
 import 'package:classified_app/screens/edit_account_screen.dart';
 import 'package:classified_app/screens/my_adds_screen.dart';
+import 'package:classified_app/screens/settings_screen.dart';
 import 'package:classified_app/widgets/card_item_widget.dart';
 import 'package:classified_app/widgets/my_add_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               shape: CircleBorder()
             ),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EditAccountScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
             },
           ),
         ],

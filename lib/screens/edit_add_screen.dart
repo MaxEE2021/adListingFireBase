@@ -27,7 +27,7 @@ class _EditAddScreenState extends State<EditAddScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top:10 ,bottom: 25),
+                padding: const EdgeInsets.only(top:10 ,bottom: 15),
                 child: TextButton(
                   child: Container(
                     height: size.height*0.18,
@@ -38,13 +38,13 @@ class _EditAddScreenState extends State<EditAddScreen> {
                       children: [
                         Icon(
                           Icons.add_a_photo_outlined,
-                          size: size.width*0.20,
+                          size: size.height*0.12,
                         ),
                       
                         Text(
                           "Tap to upload",
                           style: TextStyle(
-                            fontSize: size.width * 0.05
+                            fontSize: size.height * 0.03
                           ),
                         ),
                       ],

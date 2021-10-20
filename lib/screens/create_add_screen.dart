@@ -59,10 +59,11 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top:10 ,bottom: 20),
+                padding: const EdgeInsets.only(top:10 ,bottom: 15),
                 child: TextButton(
                   child: Container(
-                    height: size.height*0.18,
+                    height: size.height*0.20,
+                    // height: size.width*0.30,
                     width: size.width*0.38,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -70,19 +71,21 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
                       children: [
                         Icon(
                           Icons.add_a_photo_outlined,
-                          size: size.width*0.20,
+                          size: size.height*0.12,
+                          
                         ),
                       
                         Text(
                           "Tap to upload",
                           style: TextStyle(
-                            fontSize: size.width * 0.05
+                            fontSize: size.height * 0.03
                           ),
                         ),
                       ],
                     ),
                     decoration: BoxDecoration(
                       // color: Colors.cyan,
+                      borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: Colors.black26,
                       ),
@@ -104,19 +107,7 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Container(
-                  // height: 100,
-                  // color: Colors.blue,
                   child: isCaptured ?
-                  // Row(
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.symmetric(horizontal:15.0),
-                  //       child: GalerryItemWidget(
-                  //         fileimg: path,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // )
 
                   Container(
                     height: 100,
@@ -133,25 +124,14 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
                       },
                     ),
                   )
+
                   :
+                  
                   Container(
                     height: 5,
                   )
                 ),
               ),
-
-              // Container(
-              //   child: isCaptured ?
-              //   Image.file(
-              //     path,
-              //     height: 100,
-              //     width: 100,
-              //   )
-              //   :
-              //   Container()
-              //   ,
-              // ),
-
 
 
 
