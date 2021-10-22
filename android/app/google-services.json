@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "35477128085",
+    "project_id": "ad-listing-e014b",
+    "storage_bucket": "ad-listing-e014b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35477128085:android:e16ef183e7e2dcc143ec9c",
+        "android_client_info": {
+          "package_name": "com.appmakingMax.classified_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35477128085-hi9ju9a6t4nnds0rucr4pjf5me56bsg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL8KJk7TVXj1ZhcjsG_K-13zJuBAaElos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35477128085-hi9ju9a6t4nnds0rucr4pjf5me56bsg2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

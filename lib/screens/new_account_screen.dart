@@ -1,11 +1,36 @@
+
+import 'package:classified_app/screens/validation_screen.dart';
 import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:classified_app/widgets/text_field_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'login_screen.dart';
 
 class NewAccountScreen extends StatelessWidget {
-  const NewAccountScreen({Key? key}) : super(key: key);
+  // const NewAccountScreen({Key? key}) : super(key: key);
+  TextEditingController _nameCtrl = TextEditingController();
+  TextEditingController _emailCtrl = TextEditingController();
+  TextEditingController _numberCtrl = TextEditingController();
+  TextEditingController _pwdCtrl = TextEditingController();
+
+  registation(){
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    auth.createUserWithEmailAndPassword(email: _emailCtrl.text, password: _pwdCtrl.text).then((res){
+      firestore.collection('users').doc(res.user?.uid).set({
+        "email"  : _emailCtrl.text,
+        "name"   : _nameCtrl.text,
+        "number" : _numberCtrl.text,
+        "UID"    : res.user?.uid.toString(),
+      });
+      print("Registration Succes");
+    }).catchError((e){
+      print(e);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,25 +83,33 @@ class NewAccountScreen extends StatelessWidget {
                   children: [
 
                     CustomTextFieldWidget(
+                      cstmController: _nameCtrl,                
                       customHintText: "Full Name",
                       textType: TextInputType.text,
                     ),
                     CustomTextFieldWidget(
+                      cstmController: _emailCtrl,
                       customHintText: "Email Address",
                       textType: TextInputType.emailAddress,
                     ),
                     CustomTextFieldWidget(
+                      cstmController: _numberCtrl,
                       customHintText: "Mobile Number",
                       textType: TextInputType.number,
                     ),
                     CustomTextFieldWidget(
+                      cstmController: _pwdCtrl,
                       customHintText: "Password",
                       textType: TextInputType.text,
                       isPassword: true,
                     ),
 
                     CustomButtonWidget(
-                      buttonText: "Registe Now",
+                      buttonText: "Register Now",
+                      buttonFunction: (){
+                        registation();
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ValidationScreen()));
+                      },
                     ),
 
                     TextButton(

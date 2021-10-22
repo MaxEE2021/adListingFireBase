@@ -3,9 +3,23 @@ import 'package:classified_app/screens/new_account_screen.dart';
 import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:classified_app/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LogInScreen extends StatelessWidget {
-  const LogInScreen({Key? key}) : super(key: key);
+  // const LogInScreen({Key? key}) : super(key: key);
+  var _loginState = false;
+
+  TextEditingController _emailCtrl = TextEditingController();
+  TextEditingController _pwdCtrl = TextEditingController();
+  login(){
+    FirebaseAuth logIn = FirebaseAuth.instance;
+    logIn.signInWithEmailAndPassword(email: _emailCtrl.text, password: _pwdCtrl.text).then((value){
+      print("login Succes");
+      _loginState = true;
+    }).catchError((e){
+      print(e);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +72,12 @@ class LogInScreen extends StatelessWidget {
                   children: [
 
                     CustomTextFieldWidget(
+                      cstmController: _emailCtrl,
                       customHintText: "Email",
                       textType: TextInputType.emailAddress,
                     ),
                     CustomTextFieldWidget(
+                      cstmController: _pwdCtrl,
                       customHintText: "Password",
                       textType: TextInputType.text,
                       isPassword: true,
@@ -70,7 +86,8 @@ class LogInScreen extends StatelessWidget {
                     CustomButtonWidget(
                       buttonText: "Login",
                       buttonFunction: (){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                        login();
+                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                       },
                     ),
 

@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,12 +10,16 @@ class CustomTextFieldWidget extends StatelessWidget {
   final TextInputType textType;
   final bool isPassword;
   final int customMaxLines;
+  final TextEditingController? cstmController;
+  final bool readOnly;
 
   const CustomTextFieldWidget ({
     this.customHintText="Hint Text",
     this.textType= TextInputType.text,
     this.isPassword=false,
     this.customMaxLines=1,
+    this.cstmController,
+    this.readOnly=false,
   });
 
 
@@ -24,6 +29,8 @@ class CustomTextFieldWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: TextField(
+          readOnly: readOnly,
+          controller: cstmController,
           maxLines: customMaxLines,
           autofocus: false,
           keyboardType: textType,
