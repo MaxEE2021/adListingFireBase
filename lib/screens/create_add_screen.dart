@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:classified_app/widgets/gallery_item_widget.dart';
 import 'package:classified_app/widgets/text_field_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,20 +18,12 @@ class CreateAddScreen extends StatefulWidget {
 
 class _CreateAddScreenState extends State<CreateAddScreen> {
   var isCaptured = false;
-  var path;
   List path2=[];
 
-  Future capture()async{
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery).then((file){
-      print(file!.path);
-      setState(() {
-        isCaptured = true;
-        path = file.path;
-        // path = File(file.path);
-      });
-    });
-  }
-
+  TextEditingController _titleCtrl = TextEditingController();
+  TextEditingController _priceCtrl = TextEditingController();
+  TextEditingController _numberCtrl = TextEditingController();
+  TextEditingController _descCtrl = TextEditingController();
 
   caputureMultipleImg() async {
       await ImagePicker().pickMultiImage().then((file) {
@@ -44,6 +38,22 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
         });
       });
     }
+
+    createNewAd(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    // var adID = "AD-${FirebaseAuth.instance.currentUser!.uid}";
+    FirebaseFirestore.instance.collection("users").doc(uid).collection("ads").doc().
+    set({
+      "title"         : _titleCtrl.text,
+      "price"         : _priceCtrl.text,
+      "number"        : _numberCtrl.text,
+      "description"   : _descCtrl.text,
+      // "imgProfile" : ""
+    });
+    print("New ad created");
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -136,18 +146,22 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
 
 
               CustomTextFieldWidget(
+                cstmController: _titleCtrl,
                 customHintText: "Title",
                 textType: TextInputType.text,
               ),
               CustomTextFieldWidget(
+                cstmController: _priceCtrl,
                 customHintText: "Price",
                 textType: TextInputType.number,
               ),
               CustomTextFieldWidget(
+                cstmController: _numberCtrl,
                 customHintText: "Contact Number",
                 textType: TextInputType.number,
               ),
               CustomTextFieldWidget(
+                cstmController: _descCtrl,
                 customHintText: "Description",
                 textType: TextInputType.text,
                 customMaxLines: 3,
@@ -155,6 +169,9 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
 
               CustomButtonWidget(
                 buttonText: "Submit Ad",
+                buttonFunction: (){
+                  createNewAd();
+                },
               )
               
             ],
