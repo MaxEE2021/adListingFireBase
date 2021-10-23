@@ -3,7 +3,11 @@ import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProducDetailsScreen extends StatelessWidget {
-  const ProducDetailsScreen({Key? key}) : super(key: key);
+  // const ProducDetailsScreen({Key? key}) : super(key: key);
+  final Map? allAds;
+  const ProducDetailsScreen ({
+    this.allAds,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,8 @@ class ProducDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Used Mackbook Pro for sale",
+                allAds!["title"],
+                // "Used Mackbook Pro for sale",
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold
@@ -28,7 +33,8 @@ class ProducDetailsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical:10.0),
                 child: Text(
-                  "\$ 40000",
+                  "\$ ${allAds!["price"]}",
+                  // "\$ 40000",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -80,7 +86,8 @@ class ProducDetailsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical:15.0),
                 child: Text(
-                  "sdkjfhsjf ksdhfkjs ksjdhf ksjdfhksjdfhs lkjsfdhs kdfjh ksjdfhksjdfh lksjh ksajdhkajsd flkjsafdhkjshdf lksjf",
+                  allAds!["description"],
+                  // "sdkjfhsjf ksdhfkjs ksjdhf ksjdfhksjdfhs lkjsfdhs kdfjh ksjdfhksjdfh lksjh ksajdhkajsd flkjsafdhkjshdf lksjf",
                   
                 ),
               ),

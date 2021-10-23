@@ -19,11 +19,18 @@ class CreateAddScreen extends StatefulWidget {
 class _CreateAddScreenState extends State<CreateAddScreen> {
   var isCaptured = false;
   List path2=[];
+  var numereOfads =0;
 
   TextEditingController _titleCtrl = TextEditingController();
   TextEditingController _priceCtrl = TextEditingController();
   TextEditingController _numberCtrl = TextEditingController();
   TextEditingController _descCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    getUserAds();
+  }
 
   caputureMultipleImg() async {
       await ImagePicker().pickMultiImage().then((file) {
@@ -38,7 +45,8 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
         });
       });
     }
-
+// this is the oldone create add, is a collection inside userDB
+// at the end this function was better
     createNewAd(){
     var uid = FirebaseAuth.instance.currentUser!.uid;
     // var adID = "AD-${FirebaseAuth.instance.currentUser!.uid}";
@@ -51,6 +59,43 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
       // "imgProfile" : ""
     });
     print("New ad created");
+  }
+//this is te good one because is out from users
+// this function works but is more complicated to fetch data
+     createNewAd2(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    if (numereOfads > 0){
+      FirebaseFirestore.instance.collection("ads").doc(uid).update({
+        "ad-${numereOfads+1}": {
+          "title"         : _titleCtrl.text,
+          "price"         : _priceCtrl.text,
+          "number"        : _numberCtrl.text,
+          "description"   : _descCtrl.text,
+          // "imgProfile" : ""
+        },
+      });
+      print("New ad created");
+    }
+    else{
+      FirebaseFirestore.instance.collection("ads").doc(uid).set({
+        "ad-${numereOfads+1}": {
+          "title"         : _titleCtrl.text,
+          "price"         : _priceCtrl.text,
+          "number"        : _numberCtrl.text,
+          "description"   : _descCtrl.text,
+          // "imgProfile" : ""
+        },
+      });
+      print("New ad created");
+    }
+  }
+
+  getUserAds(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("ads").doc(uid).get().then((snapshot){
+      // print(snapshot.data()!.length);
+      numereOfads = snapshot.data()!.length;
+    });
   }
   
 
@@ -170,6 +215,7 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
               CustomButtonWidget(
                 buttonText: "Submit Ad",
                 buttonFunction: (){
+                  // createNewAd();
                   createNewAd();
                 },
               )
