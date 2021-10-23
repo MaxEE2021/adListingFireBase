@@ -1,7 +1,18 @@
+import 'package:classified_app/screens/edit_add_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyAddCardWidget extends StatelessWidget {
-  const MyAddCardWidget({Key? key}) : super(key: key);
+  // const MyAddCardWidget({Key? key}) : super(key: key);
+  
+  final Map? adsData;
+  final String title;
+  final String price;
+
+  const MyAddCardWidget ({
+    this.adsData,
+    this.title="",
+    this.price="",
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +43,8 @@ class MyAddCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Samsung for sale",
+                    title,
+                    // "Samsung for sale",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18
@@ -53,7 +65,8 @@ class MyAddCardWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "\$2000",
+                    price,
+                    // "\$2000",
                     style: TextStyle(
                       color: Colors.orange,
                       fontWeight: FontWeight.bold
@@ -66,7 +79,10 @@ class MyAddCardWidget extends StatelessWidget {
         ),
       ),
       onTap: (){
-        print("you pressed my add card widget");
+        print("you pressed my ad card widget");
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> EditAddScreen(
+          adsData: adsData,
+        )));
       },
     );
   }

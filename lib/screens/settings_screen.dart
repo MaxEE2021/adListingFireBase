@@ -3,6 +3,8 @@
 
 import 'package:classified_app/screens/edit_account_screen.dart';
 import 'package:classified_app/screens/my_adds_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,7 +19,27 @@ class SettingsScreen extends StatefulWidget {
 
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  List adsDataList =[];
+  // List adsID=[];
+  @override
+  void initState() {
+    super.initState();
+    getAdData();
+  }
+   getAdData(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("users").doc(uid).collection("ads").get().then((snapshot){
+      snapshot.docs.forEach((doc) {
+        // adDataList.add(doc.data());
+        adsDataList.add({"adID":doc.id,"adData": doc.data()});
+        // print(adsDataList[0]["adID"]);
+        // adsID.add(doc.id);
+        // print(doc.data());
+      });
+    });
+  }
   var img = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-xcWvwdrImsw%2FXvBUGEeyuHI%2FAAAAAAAChoE%2FDNsscKqWxmMKNDaEZrKVd9uE6baHrg7ggCLcBGAsYHQ%2Fs1600%2Fscarlett-johansson-under-the-skin-premiere-in-venice-20.jpg&f=1&nofb=1";
+  
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +125,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                MyAddsScreen()));
+                MyAddsScreen(
+                  adsData: adsDataList,
+                )));
         },
             ),
             InkWell(

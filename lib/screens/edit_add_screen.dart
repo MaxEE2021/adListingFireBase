@@ -1,16 +1,56 @@
+
+import 'dart:convert';
+
 import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:classified_app/widgets/gallery_item_widget.dart';
 import 'package:classified_app/widgets/text_field_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EditAddScreen extends StatefulWidget {
-  EditAddScreen({Key? key}) : super(key: key);
+  // EditAddScreen({Key? key}) : super(key: key);
+  final Map? adsData;
+  const EditAddScreen({
+    this.adsData,
+  });
 
   @override
   _EditAddScreenState createState() => _EditAddScreenState();
 }
 
 class _EditAddScreenState extends State<EditAddScreen> {
+  TextEditingController _titleCtrl = TextEditingController();
+  TextEditingController _priceCtrl = TextEditingController();
+  TextEditingController _numberCtrl = TextEditingController();
+  TextEditingController _descCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleCtrl.text = widget.adsData!["adData"]["title"];
+    _priceCtrl.text = widget.adsData!["adData"]["price"];
+    _numberCtrl.text = widget.adsData!["adData"]["number"];
+    _descCtrl.text = widget.adsData!["adData"]["description"];
+  }
+
+      
+   updateAd(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    var adID = widget.adsData!["adID"];
+    print(uid); 
+    print(adID);
+    FirebaseFirestore.instance.collection("users").doc(uid).collection("ads").doc(adID).
+    update({
+      "title"         : _titleCtrl.text,
+      "price"         : _priceCtrl.text,
+      "number"        : _numberCtrl.text,
+      "description"   : _descCtrl.text,
+      // "imgProfile" : ""
+    });
+    print("Ad updated");
+  }
+
   var img = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-xcWvwdrImsw%2FXvBUGEeyuHI%2FAAAAAAAChoE%2FDNsscKqWxmMKNDaEZrKVd9uE6baHrg7ggCLcBGAsYHQ%2Fs1600%2Fscarlett-johansson-under-the-skin-premiere-in-venice-20.jpg&f=1&nofb=1";
   @override
   Widget build(BuildContext context) {
@@ -99,18 +139,22 @@ class _EditAddScreenState extends State<EditAddScreen> {
 
 
               CustomTextFieldWidget(
+                cstmController: _titleCtrl,
                 customHintText: "Title",
                 textType: TextInputType.text,
               ),
               CustomTextFieldWidget(
+                cstmController: _priceCtrl,
                 customHintText: "Price",
                 textType: TextInputType.number,
               ),
               CustomTextFieldWidget(
+                cstmController: _numberCtrl,
                 customHintText: "Contact Number",
                 textType: TextInputType.number,
               ),
               CustomTextFieldWidget(
+                cstmController: _descCtrl,
                 customHintText: "Description",
                 textType: TextInputType.text,
                 customMaxLines: 3,
@@ -118,6 +162,9 @@ class _EditAddScreenState extends State<EditAddScreen> {
 
               CustomButtonWidget(
                 buttonText: "Submit Ad",
+                buttonFunction: (){
+                  updateAd();
+                },
               )
               
             ],
