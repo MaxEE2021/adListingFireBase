@@ -6,7 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EditAccountScreen extends StatefulWidget {
-  EditAccountScreen({Key? key}) : super(key: key);
+  // EditAccountScreen({Key? key}) : super(key: key);
+  final String imgProfFirebse;
+  const EditAccountScreen ({
+    this.imgProfFirebse="",
+  });
 
   @override
   _EditAccountScreenState createState() => _EditAccountScreenState();
@@ -36,7 +40,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       "email"  : _emailCtrl.text,
       "name"   : _nameCtrl.text,
       "number" : _numberCtrl.text,
-      "imgProfile" : ""
+      "img" : ""
     });
   }
 
@@ -48,10 +52,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       _numberCtrl.text = resp["number"];
     });
   }
-
+  String image = "https://freesvg.org/img/abstract-user-flat-4.png";
   @override
   Widget build(BuildContext context) {
-    var img = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-xcWvwdrImsw%2FXvBUGEeyuHI%2FAAAAAAAChoE%2FDNsscKqWxmMKNDaEZrKVd9uE6baHrg7ggCLcBGAsYHQ%2Fs1600%2Fscarlett-johansson-under-the-skin-premiere-in-venice-20.jpg&f=1&nofb=1";
+    
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +72,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 25),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(img),
+                    backgroundImage: NetworkImage(widget.imgProfFirebse == "" ?  image : widget.imgProfFirebse ),
                     radius: size.height*0.08,
                   ),
                 ),

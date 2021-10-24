@@ -21,13 +21,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var img = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-xcWvwdrImsw%2FXvBUGEeyuHI%2FAAAAAAAChoE%2FDNsscKqWxmMKNDaEZrKVd9uE6baHrg7ggCLcBGAsYHQ%2Fs1600%2Fscarlett-johansson-under-the-skin-premiere-in-venice-20.jpg&f=1&nofb=1";
+  var img = "https://freesvg.org/img/abstract-user-flat-4.png";
+  var imgProduct = "http://luztra.mx/content/images/thumbs/default-image_450.png";
+  var imgServer = "";
+
 
   var allAds=[];
   @override
   void initState() {
     super.initState();
     getAllAds();
+    getUserData();
   }
 
   Future getAllAds()async{
@@ -37,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
         print(doc.id);
         FirebaseFirestore.instance.collection("users").doc(doc.id).collection("ads").get().then((snapshot){
           snapshot.docs.forEach((element) {
-            print(element.data());
+            // print(element.data());
             allAds.add(element.data());
-            print(allAds.length);
+            // print(allAds.length);
             setState(() {});
           });
           
@@ -47,6 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
 
+  }
+
+   getUserData(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("users").doc(uid).get().then((resp){
+      print(resp.data());
+      imgServer = resp.data()!["img"];
+    });
   }
 
   @override
@@ -68,13 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             child: CircleAvatar(
               // radius: 30,
-              backgroundImage: NetworkImage(img,),
+              backgroundImage: NetworkImage(imgServer == "" ? img:imgServer),
             ),
             style: TextButton.styleFrom(
               shape: CircleBorder()
             ),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen(
+                ProfilePicFirebase: imgServer == "" ? img:imgServer,
+              )));
             },
           ),
         ],
@@ -98,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: allAds.length,
                 itemBuilder: (BuildContext context, int index) {
                   return CardItemWidget(
-                    img: img,
+                    img: imgProduct,
                     productTitle: allAds[index]["title"],
                     price: allAds[index]["price"],
                     allAds: allAds[index],

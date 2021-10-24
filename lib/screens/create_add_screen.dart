@@ -62,40 +62,64 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
   }
 //this is te good one because is out from users
 // this function works but is more complicated to fetch data
-     createNewAd2(){
-    var uid = FirebaseAuth.instance.currentUser!.uid;
-    if (numereOfads > 0){
-      FirebaseFirestore.instance.collection("ads").doc(uid).update({
-        "ad-${numereOfads+1}": {
-          "title"         : _titleCtrl.text,
-          "price"         : _priceCtrl.text,
-          "number"        : _numberCtrl.text,
-          "description"   : _descCtrl.text,
-          // "imgProfile" : ""
-        },
-      });
-      print("New ad created");
-    }
-    else{
-      FirebaseFirestore.instance.collection("ads").doc(uid).set({
-        "ad-${numereOfads+1}": {
-          "title"         : _titleCtrl.text,
-          "price"         : _priceCtrl.text,
-          "number"        : _numberCtrl.text,
-          "description"   : _descCtrl.text,
-          // "imgProfile" : ""
-        },
-      });
-      print("New ad created");
-    }
-  }
+  //    createNewAd2(){
+  //   var uid = FirebaseAuth.instance.currentUser!.uid;
+  //   if (numereOfads > 0){
+  //     FirebaseFirestore.instance.collection("ads").doc(uid).update({
+  //       "ad-${numereOfads+1}": {
+  //         "title"         : _titleCtrl.text,
+  //         "price"         : _priceCtrl.text,
+  //         "number"        : _numberCtrl.text,
+  //         "description"   : _descCtrl.text,
+  //         // "imgAd" : ""
+  //       },
+  //     });
+  //     print("New ad created");
+  //   }
+  //   else{
+  //     FirebaseFirestore.instance.collection("ads").doc(uid).set({
+  //       "ad-${numereOfads+1}": {
+  //         "title"         : _titleCtrl.text,
+  //         "price"         : _priceCtrl.text,
+  //         "number"        : _numberCtrl.text,
+  //         "description"   : _descCtrl.text,
+  //         // "imgAd" : ""
+  //       },
+  //     });
+  //     print("New ad created");
+  //   }
+  // }
+
+  // getUserAds(){
+  //   var uid = FirebaseAuth.instance.currentUser!.uid;
+  //   if(numereOfads>0){
+  //     var uid = FirebaseAuth.instance.currentUser!.uid;
+  //     FirebaseFirestore.instance.collection("ads").doc(uid).get().then((snapshot){
+  //       // print(snapshot.data()!.length);
+  //       numereOfads = snapshot.data()!.length;
+  //     });
+  //   }
+  //   else{
+  //     FirebaseFirestore.instance.collection("users").doc(uid).collection("ads");
+  //   }
+  // }
 
   getUserAds(){
     var uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore.instance.collection("ads").doc(uid).get().then((snapshot){
-      // print(snapshot.data()!.length);
-      numereOfads = snapshot.data()!.length;
-    });
+    // if(numereOfads>0){
+      FirebaseFirestore.instance.collection("users").doc(uid).collection("ads").get().then((snapshot){
+        numereOfads = snapshot.docs.length;
+        print(numereOfads);
+        // snapshot.docs.forEach((doc) {
+        //   print(doc.data().length);
+        // });
+        setState(() {});
+      });
+    // }
+    // else{
+    //   FirebaseFirestore.instance.collection("users").doc(uid).collection("ads").snapshots();
+    //   setState(() {});
+    // }
   }
   
 

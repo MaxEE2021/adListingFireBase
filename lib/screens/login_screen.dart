@@ -1,5 +1,6 @@
 import 'package:classified_app/screens/home_screen.dart';
 import 'package:classified_app/screens/new_account_screen.dart';
+import 'package:classified_app/screens/validation_screen.dart';
 import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:classified_app/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ class LogInScreen extends StatelessWidget {
                       buttonText: "Login",
                       buttonFunction: (){
                         login();
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ValidationScreen()));
                       },
                     ),
 

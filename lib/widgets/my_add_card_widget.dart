@@ -2,7 +2,9 @@ import 'package:classified_app/screens/edit_add_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyAddCardWidget extends StatelessWidget {
+  
   // const MyAddCardWidget({Key? key}) : super(key: key);
+  
   
   final Map? adsData;
   final String title;
@@ -15,7 +17,9 @@ class MyAddCardWidget extends StatelessWidget {
   });
 
   @override
+  
   Widget build(BuildContext context) {
+    var imgProduct = "http://luztra.mx/content/images/thumbs/default-image_450.png";
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
@@ -32,7 +36,7 @@ class MyAddCardWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-xcWvwdrImsw%2FXvBUGEeyuHI%2FAAAAAAAChoE%2FDNsscKqWxmMKNDaEZrKVd9uE6baHrg7ggCLcBGAsYHQ%2Fs1600%2Fscarlett-johansson-under-the-skin-premiere-in-venice-20.jpg&f=1&nofb=1")
+                    image: NetworkImage(adsData!["adData"]["imgAd"] == null ?  imgProduct : adsData!["adData"]["imgAd"][0])
                   )
                 ),
               ),
@@ -80,6 +84,7 @@ class MyAddCardWidget extends StatelessWidget {
       ),
       onTap: (){
         print("you pressed my ad card widget");
+        print(adsData!["adData"]["title"]);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> EditAddScreen(
           adsData: adsData,
         )));

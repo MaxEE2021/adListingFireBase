@@ -11,7 +11,7 @@ class ProducDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var img = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-xcWvwdrImsw%2FXvBUGEeyuHI%2FAAAAAAAChoE%2FDNsscKqWxmMKNDaEZrKVd9uE6baHrg7ggCLcBGAsYHQ%2Fs1600%2Fscarlett-johansson-under-the-skin-premiere-in-venice-20.jpg&f=1&nofb=1";
+    var img = "http://luztra.mx/content/images/thumbs/default-image_450.png";
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -49,7 +49,7 @@ class ProducDetailsScreen extends StatelessWidget {
                   color: Colors.blue,
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(img)
+                    image: NetworkImage(allAds!["imgAd"] == null ? img :allAds!["imgAd"][0])
                   )
                 ),
               ),

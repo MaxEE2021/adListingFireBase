@@ -1,4 +1,5 @@
 
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:classified_app/screens/product_details_screen.dart';
@@ -38,7 +39,7 @@ class _CardItemWidgetState extends State<CardItemWidget> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(widget.img) 
+                  image: NetworkImage( widget.allAds!["imgAd"] == null ?  widget.img : widget.allAds!["imgAd"][0]) 
                 ),
               )
             ),
@@ -81,6 +82,7 @@ class _CardItemWidgetState extends State<CardItemWidget> {
         onTap: widget.onTap == null ? 
           (){
             print("you clicked the product");
+            print(widget.allAds!["imgAd"]);
             Navigator.push(context, MaterialPageRoute(builder: (context) => ProducDetailsScreen(
               allAds: widget.allAds,
             )));

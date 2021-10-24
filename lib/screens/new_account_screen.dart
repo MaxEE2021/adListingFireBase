@@ -24,6 +24,7 @@ class NewAccountScreen extends StatelessWidget {
         "name"   : _nameCtrl.text,
         "number" : _numberCtrl.text,
         "UID"    : res.user?.uid.toString(),
+        "img"    : ""
       });
       print("Registration Succes");
     }).catchError((e){

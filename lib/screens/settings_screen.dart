@@ -10,7 +10,12 @@ import 'package:flutter/material.dart';
 
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  // const SettingsScreen({Key? key}) : super(key: key);
+  final String ProfilePicFirebase;
+
+  const SettingsScreen ({
+    this.ProfilePicFirebase="https://freesvg.org/img/abstract-user-flat-4.png",
+  });
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -20,10 +25,14 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   List adsDataList =[];
+  String name = "UserName";
+  String number = "+52";
+  String imgProfFireBase = "";
   // List adsID=[];
   @override
   void initState() {
     super.initState();
+    getUserData();
     getAdData();
   }
    getAdData(){
@@ -36,9 +45,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // adsID.add(doc.id);
         // print(doc.data());
       });
+      setState(() {});
     });
   }
-  var img = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-xcWvwdrImsw%2FXvBUGEeyuHI%2FAAAAAAAChoE%2FDNsscKqWxmMKNDaEZrKVd9uE6baHrg7ggCLcBGAsYHQ%2Fs1600%2Fscarlett-johansson-under-the-skin-premiere-in-venice-20.jpg&f=1&nofb=1";
+
+  
+  getUserData(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("users").doc(uid).get().then((resp){
+      name = resp["name"];
+      number= resp["number"];
+      imgProfFireBase=resp["img"];
+    });
+  }
+ 
   
 
   @override
@@ -62,7 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     padding: const EdgeInsets.only(right:34.0),
                     child: CircleAvatar(
                       radius: 26,
-                      backgroundImage: NetworkImage(img),
+                      backgroundImage: NetworkImage(widget.ProfilePicFirebase),
                     ),
                   ),
                   Expanded(
@@ -70,13 +90,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "username",
+                          name,
+                          // "username",
                           style: TextStyle(
                             fontSize: 18
                           ),
                         ),
                         Text(
-                          "99999999",
+                          number,
+                          // "99999999",
                           style: TextStyle(
                             color: Colors.black45,
                             fontSize: 16
@@ -96,7 +118,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                EditAccountScreen()));
+                EditAccountScreen(
+                  imgProfFirebse: imgProfFireBase,
+                )));
         },
             ),
 
