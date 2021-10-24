@@ -36,12 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future getAllAds()async{
     allAds=[];
+    var _tempAllAds=[];
     await FirebaseFirestore.instance.collection("users").get().then((value){
       value.docs.forEach((doc) { 
         print(doc.id);
         FirebaseFirestore.instance.collection("users").doc(doc.id).collection("ads").get().then((snapshot){
           snapshot.docs.forEach((element) {
             // print(element.data());
+            // _tempAllAds.add(element.data());
             allAds.add(element.data());
             // print(allAds.length);
             setState(() {});
@@ -49,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
           
         });
       });
+     
     });
 
   }

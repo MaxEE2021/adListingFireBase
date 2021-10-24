@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:math';
 
+import 'package:classified_app/screens/validation_screen.dart';
 import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:classified_app/widgets/gallery_item_widget.dart';
 import 'package:classified_app/widgets/text_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -56,9 +59,10 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
       "price"         : _priceCtrl.text,
       "number"        : _numberCtrl.text,
       "description"   : _descCtrl.text,
-      // "imgProfile" : ""
+      "imgAd"         : imagesUploaded,
     });
     print("New ad created");
+    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ValidationScreen()));
   }
 //this is te good one because is out from users
 // this function works but is more complicated to fetch data
@@ -121,7 +125,35 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
     //   setState(() {});
     // }
   }
-  
+  var imagesUploaded=[];
+  uploadMultipleImg() async {
+    var picker = ImagePicker();
+    var pickedFiles = await picker.pickMultiImage();
+    if (pickedFiles!.isNotEmpty) {
+      for (var image in pickedFiles) {
+        File img = File(image.path);
+        var rng = Random();
+        FirebaseStorage.instance
+            .ref()
+            .child("images")
+            .child(rng.nextInt(10000).toString())
+            .putFile(img)
+            .then((res) {
+          res.ref.getDownloadURL().then((url) {
+            setState(() {
+              imagesUploaded.add(url);
+              isCaptured = true;
+            });
+          });
+        }).catchError((e) {
+          print(e.toString());
+        });
+      }
+    } else {
+      print('Select photos');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +208,8 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
                   onPressed: (){
                     print("upload a picture");
                     // capture();
-                    caputureMultipleImg();
+                    // caputureMultipleImg();
+                    uploadMultipleImg();
 
                   },
 
@@ -192,12 +225,12 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
                     height: 100,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: path2.length,
+                      itemCount: imagesUploaded.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal:8.0),
                           child: GalerryItemWidget(
-                            fileimg: path2[index],
+                            img: imagesUploaded[index],
                           ),
                         );
                       },
@@ -250,4 +283,5 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
       ),
     );
   }
+  
 }

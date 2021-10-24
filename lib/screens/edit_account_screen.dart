@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:classified_app/screens/login_screen.dart';
 import 'package:classified_app/widgets/custom_btn_widget.dart';
 import 'package:classified_app/widgets/text_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditAccountScreen extends StatefulWidget {
   // EditAccountScreen({Key? key}) : super(key: key);
@@ -20,6 +25,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController _nameCtrl = TextEditingController();
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _numberCtrl = TextEditingController();
+  String imagen = "";
 
   @override
   void initState() {
@@ -40,10 +46,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       "email"  : _emailCtrl.text,
       "name"   : _nameCtrl.text,
       "number" : _numberCtrl.text,
-      "img" : ""
+      "img"    : imagen
     });
   }
-
+  
   getUserData(){
     var uid = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore.instance.collection("users").doc(uid).get().then((resp){
@@ -52,6 +58,32 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       _numberCtrl.text = resp["number"];
     });
   }
+
+  uploadImg() async {
+    var picker = ImagePicker();
+    var pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile!.path.isNotEmpty) {
+      File image = File(pickedFile.path);
+      var rng = Random();
+      FirebaseStorage.instance
+          .ref()
+          .child("users")
+          .child(rng.nextInt(10000).toString())
+          .putFile(image)
+          .then((res) {
+        res.ref.getDownloadURL().then((url) {
+          setState(() {
+            imagen = url;
+          });
+        });
+      }).catchError((e) {
+        print(e.toString());
+      });
+    } else {
+      print('Select photos');
+    }
+  }
+  
   String image = "https://freesvg.org/img/abstract-user-flat-4.png";
   @override
   Widget build(BuildContext context) {
@@ -71,9 +103,13 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 25),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(widget.imgProfFirebse == "" ?  image : widget.imgProfFirebse ),
-                    radius: size.height*0.08,
+                  child: InkWell(
+                    onTap: uploadImg,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(widget.imgProfFirebse == "" ?  imagen == "" ? image: imagen : widget.imgProfFirebse),
+                      // backgroundImage: NetworkImage(widget.imgProfFirebse == "" ?  image : widget.imgProfFirebse ),
+                      radius: size.height*0.08,
+                    ),
                   ),
                 ),
       
@@ -96,6 +132,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       
                 CustomButtonWidget(
                   buttonText: "Update Profile",
+                  buttonFunction: (){
+                    updateProfile();
+                  },
                 ),
       
                    TextButton(
