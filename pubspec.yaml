@@ -34,6 +34,8 @@ dependencies:
   cloud_firestore:
   firebase_storage:
   firebase_messaging:
+  url_launcher:
+  photo_view:
 
 dev_dependencies:
   flutter_test:

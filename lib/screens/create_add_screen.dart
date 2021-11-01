@@ -23,6 +23,7 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
   var isCaptured = false;
   List path2=[];
   var numereOfads =0;
+  var userName = "";
 
   TextEditingController _titleCtrl = TextEditingController();
   TextEditingController _priceCtrl = TextEditingController();
@@ -33,6 +34,7 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
   void initState() {
     super.initState();
     getUserAds();
+    getUserData();
   }
 
   caputureMultipleImg() async {
@@ -51,15 +53,19 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
 // this is the oldone create add, is a collection inside userDB
 // at the end this function was better
     createNewAd(){
+    DateTime now = DateTime.now();
+    var creationDate = "created at ${now.day}-${now.month}-${now.year}";
     var uid = FirebaseAuth.instance.currentUser!.uid;
     // var adID = "AD-${FirebaseAuth.instance.currentUser!.uid}";
     FirebaseFirestore.instance.collection("users").doc(uid).collection("ads").doc().
     set({
       "title"         : _titleCtrl.text,
+      "author"        : userName,
       "price"         : _priceCtrl.text,
       "number"        : _numberCtrl.text,
       "description"   : _descCtrl.text,
       "imgAd"         : imagesUploaded,
+      "creationDate"  : creationDate,
     });
     print("New ad created");
     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ValidationScreen()));
@@ -107,6 +113,14 @@ class _CreateAddScreenState extends State<CreateAddScreen> {
   //     FirebaseFirestore.instance.collection("users").doc(uid).collection("ads");
   //   }
   // }
+  getUserData(){
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("users").doc(uid).get().then((resp){
+      print(resp.data());
+      userName = resp.data()!["name"];
+      setState(() {});
+    });
+  }
 
   getUserAds(){
     var uid = FirebaseAuth.instance.currentUser!.uid;
